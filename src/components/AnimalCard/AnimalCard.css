@@ -1,0 +1,110 @@
+.animal-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 2px 12px -2px rgba(0,0,0,0.06);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.animal-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px -8px rgba(0,0,0,0.12);
+}
+.animal-card-image {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+.animal-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+.animal-card:hover .animal-card-image img {
+  transform: scale(1.05);
+}
+.animal-card-match {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  backdrop-filter: blur(8px);
+}
+.animal-card-match.high {
+  background: rgba(194, 24, 91, 0.9);
+  color: white;
+}
+.animal-card-match.medium {
+  background: rgba(100, 100, 100, 0.9);
+  color: white;
+}
+.animal-card-match.low {
+  background: rgba(200, 200, 200, 0.9);
+  color: #333;
+}
+.animal-card-species {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(4px);
+  color: #1a1a1a;
+}
+.animal-card-body {
+  padding: 1rem;
+}
+.animal-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+.animal-card-header h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin: 0;
+}
+.animal-card-heart {
+  color: #ccc;
+  transition: color 0.2s;
+}
+.animal-card:hover .animal-card-heart {
+  color: #e57373;
+}
+.animal-card-info {
+  font-size: 0.875rem;
+  color: #666;
+  margin: 0 0 0.5rem;
+}
+.animal-card-location {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: #888;
+}
+.animal-card-traits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.75rem;
+}
+.animal-card-trait {
+  padding: 0.25rem 0.5rem;
+  background: #fce4ec;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  color: #c2185b;
+  font-weight: 500;
+}
