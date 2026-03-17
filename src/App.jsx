@@ -24,6 +24,9 @@ import NotFound from './pages/NotFound'
 import FavoritesPage from './pages/FavoritesPage'
 import HealthJournalPage from './pages/HealthJournalPage'
 import AdminPage from './pages/AdminPage'
+import CalculatorPage from './pages/CalculatorPage'
+import StatisticiPage from './pages/StatisticiPage'
+import TransparentaPage from './pages/TransparentaPage'
 
 const userDataSelector = state => state.user.data
 
@@ -50,6 +53,9 @@ const App = () => {
           <Route path='/autentificare' element={<AuthPage />} />
           <Route path='/favorite' element={<FavoritesPage />} />
           <Route path='/jurnal-sanatate' element={<HealthJournalPage />} />
+          <Route path='/calculator' element={<CalculatorPage />} />
+          <Route path='/statistici' element={<StatisticiPage />} />
+          <Route path='/transparenta' element={<TransparentaPage />} />
           <Route
             path='/admin'
             element={

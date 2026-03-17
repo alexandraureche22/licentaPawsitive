@@ -13,7 +13,10 @@ const navLinks = [
   { to: '/donatii', label: 'Donează' },
   { to: '/implica-te', label: 'Implică-te' },
   { to: '/noutati', label: 'Noutăți' },
-  { to: '/favorite', label: 'Favorite' }
+  { to: '/favorite', label: 'Favorite' },
+   { to: '/calculator', label: 'Calculator' },
+  { to: '/statistici', label: 'Statistici' },
+  { to: '/transparenta', label: 'Transparență' }
 ]
 
 const adminLink = { to: '/admin', label: 'Admin' }
