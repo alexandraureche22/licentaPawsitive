@@ -1,7 +1,9 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { MapPin, AlertTriangle, Clock, Package } from 'lucide-react'
 import { shelterNeeds } from '../data/animals'
 import './Pages.css'
+
 
 const NeedsMapPage = () => (
   <div className='page' style={{ paddingTop: '6rem', paddingBottom: '3rem' }}>
@@ -48,8 +50,8 @@ const NeedsMapPage = () => (
                   </div>
                 ))}
               </div>
-              <button className='btn btn-outline btn-block' style={{ marginTop: '1rem' }}>Vreau să ajut</button>
-            </div>
+              <Link to={`/donatii`} className='btn btn-outline btn-block' style={{ marginTop: '1rem' }}>Vreau să ajut</Link>
+              </div>
           ))}
         </div>
       </div>

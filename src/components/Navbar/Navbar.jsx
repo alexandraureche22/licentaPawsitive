@@ -12,9 +12,11 @@ const navLinks = [
   { to: '/despre', label: 'Despre Noi' },
   { to: '/donatii', label: 'Donează' },
   { to: '/implica-te', label: 'Implică-te' },
-  { to: '/noutati', label: 'Noutăți' }
+  { to: '/noutati', label: 'Noutăți' },
+  { to: '/favorite', label: 'Favorite' }
 ]
 
+const adminLink = { to: '/admin', label: 'Admin' }
 const userDataSelector = state => state.user.data
 
 const Navbar = () => {
@@ -48,6 +50,11 @@ const Navbar = () => {
               {link.label}
             </Link>
           ))}
+          {isAuthenticated && userData.type === 'admin' && (
+            <Link to={adminLink.to} className={`navbar-link ${location.pathname === '/admin' ? 'active' : ''}`}>
+              {adminLink.label}
+            </Link>
+          )}
           {isAuthenticated ? (
             <button onClick={handleLogout} className='navbar-link navbar-btn'>
               <LogOut size={16} /> Ieșire
@@ -76,6 +83,11 @@ const Navbar = () => {
               {link.label}
             </Link>
           ))}
+          {isAuthenticated && userData.type === 'admin' && (
+            <Link to={adminLink.to} onClick={() => setOpen(false)} className={`navbar-mobile-link ${location.pathname === '/admin' ? 'active' : ''}`}>
+              {adminLink.label}
+            </Link>
+          )}
           {isAuthenticated ? (
             <button onClick={handleLogout} className='navbar-mobile-link navbar-btn'>
               <LogOut size={16} /> Ieșire

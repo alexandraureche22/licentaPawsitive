@@ -21,6 +21,9 @@ import SupportPage from './pages/SupportPage'
 import NeedsMapPage from './pages/NeedsMapPage'
 import AdoptionFormPage from './pages/AdoptionFormPage'
 import NotFound from './pages/NotFound'
+import FavoritesPage from './pages/FavoritesPage'
+import HealthJournalPage from './pages/HealthJournalPage'
+import AdminPage from './pages/AdminPage'
 
 const userDataSelector = state => state.user.data
 
@@ -45,6 +48,17 @@ const App = () => {
           <Route path='/suport' element={<SupportPage />} />
           <Route path='/harta-nevoi' element={<NeedsMapPage />} />
           <Route path='/autentificare' element={<AuthPage />} />
+          <Route path='/favorite' element={<FavoritesPage />} />
+          <Route path='/jurnal-sanatate' element={<HealthJournalPage />} />
+          <Route
+            path='/admin'
+            element={
+              <AuthGuard isAuthenticated={isAuthenticated}>
+                <AdminPage />
+              </AuthGuard>
+            }
+          />
+
           <Route
             path='/adopta/:id'
             element={

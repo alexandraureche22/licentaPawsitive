@@ -108,3 +108,15 @@
   color: #c2185b;
   font-weight: 500;
 }
+.animal-card-heart-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+}
+.animal-card-heart.favorited {
+  color: #e53935;
+  fill: #e53935;
+}

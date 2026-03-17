@@ -1,9 +1,20 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 import { MapPin, Heart } from 'lucide-react'
 import './AnimalCard.css'
 
 const AnimalCard = ({ animal, matchScore }) => {
+  const dispatch = useDispatch()
+  const favorites = useSelector(state => state.favorites.data)
+  const isFavorite = favorites.some(a => a.id === animal.id)
+
+  const handleFavorite = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    dispatch({ type: 'TOGGLE_FAVORITE', payload: animal })
+  }
+
   return (
     <Link to={`/animale/${animal.id}`} className='animal-card'>
       <div className='animal-card-image'>
@@ -18,7 +29,9 @@ const AnimalCard = ({ animal, matchScore }) => {
       <div className='animal-card-body'>
         <div className='animal-card-header'>
           <h3>{animal.name}</h3>
-          <Heart size={16} className='animal-card-heart' />
+          <button onClick={handleFavorite} className='animal-card-heart-btn'>
+            <Heart size={16} className={`animal-card-heart ${isFavorite ? 'favorited' : ''}`} />
+          </button>
         </div>
         <p className='animal-card-info'>{animal.breed} · {animal.age} · {animal.gender}</p>
         <div className='animal-card-location'>

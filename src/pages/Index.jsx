@@ -8,7 +8,7 @@ import './Pages.css'
 
 const features = [
   { icon: Heart, title: 'Quiz de Compatibilitate', description: 'Algoritm inteligent care îți găsește animalul potrivit pe baza stilului tău de viață.', link: '/compatibilitate' },
-  { icon: Shield, title: 'Jurnal de Sănătate', description: 'Istoric medical complet și transparent pentru fiecare animal, verificat digital.', link: '/animale' },
+  { icon: Shield, title: 'Jurnal de Sănătate', description: 'Istoric medical complet și transparent pentru fiecare animal, verificat digital.', link: '/jurnal-sanatate' },
   { icon: MessageCircle, title: 'Suport Post-Adopție', description: 'Comunicare directă cu voluntarii pentru o tranziție lină în noul cămin.', link: '/suport' },
   { icon: MapPin, title: 'Hartă Interactivă', description: 'Vezi nevoile adăposturilor din comunitatea ta și contribuie direct.', link: '/harta-nevoi' }
 ]
