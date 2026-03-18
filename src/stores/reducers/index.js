@@ -5,6 +5,7 @@ import adoptionReducer from './adoption-reducer'
 import donationReducer from './donation-reducer'
 import favoritesReducer from './favorites-reducer'
 import adminReducer from './admin-reducer'
+import statsReducer from './stats-reducer'
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
   adoption: adoptionReducer,
   donation: donationReducer,
   favorites: favoritesReducer,
-  admin: adminReducer
+  admin: adminReducer,
+  stats: statsReducer
 })
 
 export default rootReducer

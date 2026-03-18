@@ -4,6 +4,7 @@ import createAnimalEntity from './animal.mjs'
 import createHealthRecordEntity from './health-record.mjs'
 import createAdoptionRequestEntity from './adoption-request.mjs'
 import createDonationEntity from './donation.mjs'
+import createMessageEntity from './message.mjs'
 
 const sequelize = new Sequelize({
   dialect: 'sqlite',
@@ -16,20 +17,17 @@ const Animal = createAnimalEntity(sequelize, Sequelize)
 const HealthRecord = createHealthRecordEntity(sequelize, Sequelize)
 const AdoptionRequest = createAdoptionRequestEntity(sequelize, Sequelize)
 const Donation = createDonationEntity(sequelize, Sequelize)
+const Message = createMessageEntity(sequelize, Sequelize)
 
-// Un animal are mai multe inregistrari de sanatate
 Animal.hasMany(HealthRecord)
 HealthRecord.belongsTo(Animal)
 
-// Un user poate face mai multe cereri de adoptie
 User.hasMany(AdoptionRequest)
 AdoptionRequest.belongsTo(User)
 
-// O cerere de adoptie e pentru un animal
 Animal.hasMany(AdoptionRequest)
 AdoptionRequest.belongsTo(Animal)
 
-// Un user poate face mai multe donatii
 User.hasMany(Donation)
 Donation.belongsTo(User)
 
@@ -45,5 +43,6 @@ export default {
   Animal,
   HealthRecord,
   AdoptionRequest,
-  Donation
+  Donation,
+  Message
 }

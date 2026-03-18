@@ -24,6 +24,8 @@ import NotFound from './pages/NotFound'
 import FavoritesPage from './pages/FavoritesPage'
 import HealthJournalPage from './pages/HealthJournalPage'
 import AdminPage from './pages/AdminPage'
+import ChatPage from './pages/ChatPage'
+import AdminChatPage from './pages/AdminChatPage'
 import CalculatorPage from './pages/CalculatorPage'
 import StatisticiPage from './pages/StatisticiPage'
 import TransparentaPage from './pages/TransparentaPage'
@@ -57,6 +59,22 @@ const App = () => {
           <Route path='/statistici' element={<StatisticiPage />} />
           <Route path='/transparenta' element={<TransparentaPage />} />
           <Route
+            path='/chat'
+            element={
+              <AuthGuard isAuthenticated={isAuthenticated}>
+                <ChatPage />
+              </AuthGuard>
+            }
+          />
+          <Route
+            path='/admin/chat'
+            element={
+              <AuthGuard isAuthenticated={isAuthenticated}>
+                <AdminChatPage />
+              </AuthGuard>
+            }
+          />
+          <Route
             path='/admin'
             element={
               <AuthGuard isAuthenticated={isAuthenticated}>
@@ -64,7 +82,6 @@ const App = () => {
               </AuthGuard>
             }
           />
-
           <Route
             path='/adopta/:id'
             element={

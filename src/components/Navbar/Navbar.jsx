@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { PawPrint, Menu, X, User, LogOut } from 'lucide-react'
+import { PawPrint, Menu, X, User, LogOut, ChevronDown, Calculator, BarChart2, Eye } from 'lucide-react'
 import { logout } from '../../stores/actions/user-actions'
 import './Navbar.css'
 
@@ -13,17 +13,29 @@ const navLinks = [
   { to: '/donatii', label: 'Donează' },
   { to: '/implica-te', label: 'Implică-te' },
   { to: '/noutati', label: 'Noutăți' },
-  { to: '/favorite', label: 'Favorite' },
-   { to: '/calculator', label: 'Calculator' },
-  { to: '/statistici', label: 'Statistici' },
-  { to: '/transparenta', label: 'Transparență' }
+  { to: '/favorite', label: 'Favorite' }
 ]
 
-const adminLink = { to: '/admin', label: 'Admin' }
+const userOnlyLinks = [
+  { to: '/chat', label: 'Chat' }
+]
+
+const dropdownLinks = [
+  { to: '/calculator', label: 'Calculator costuri', icon: Calculator },
+  { to: '/statistici', label: 'Statistici', icon: BarChart2 },
+  { to: '/transparenta', label: 'Transparență financiară', icon: Eye }
+]
+
+const adminLinks = [
+  { to: '/admin', label: 'Panou Admin' },
+  { to: '/admin/chat', label: 'Mesaje' }
+]
+
 const userDataSelector = state => state.user.data
 
 const Navbar = () => {
   const [open, setOpen] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
   const location = useLocation()
   const dispatch = useDispatch()
   const userData = useSelector(userDataSelector)
@@ -34,6 +46,8 @@ const Navbar = () => {
     dispatch(action)
     setOpen(false)
   }
+
+  const isDropdownActive = dropdownLinks.some(l => location.pathname === l.to)
 
   return (
     <nav className='navbar'>
@@ -53,11 +67,45 @@ const Navbar = () => {
               {link.label}
             </Link>
           ))}
-          {isAuthenticated && userData.type === 'admin' && (
-            <Link to={adminLink.to} className={`navbar-link ${location.pathname === '/admin' ? 'active' : ''}`}>
-              {adminLink.label}
+
+          {/* Dropdown */}
+          <div
+            className='navbar-dropdown'
+            onMouseEnter={() => setDropdownOpen(true)}
+            onMouseLeave={() => setDropdownOpen(false)}
+          >
+            <button className={`navbar-link navbar-dropdown-btn ${isDropdownActive ? 'active' : ''}`}>
+              Date & Rapoarte <ChevronDown size={14} className={dropdownOpen ? 'chevron-rotated' : ''} />
+            </button>
+            {dropdownOpen && (
+              <div className='navbar-dropdown-menu'>
+                {dropdownLinks.map(link => (
+                  <Link
+                    key={link.to}
+                    to={link.to}
+                    className={`navbar-dropdown-item ${location.pathname === link.to ? 'active' : ''}`}
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    <link.icon size={16} />
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {isAuthenticated && userData.type !== 'admin' && userOnlyLinks.map(link => (
+            <Link key={link.to} to={link.to} className={`navbar-link ${location.pathname === link.to ? 'active' : ''}`}>
+              {link.label}
             </Link>
-          )}
+          ))}
+
+          {isAuthenticated && userData.type === 'admin' && adminLinks.map(link => (
+            <Link key={link.to} to={link.to} className={`navbar-link ${location.pathname === link.to ? 'active' : ''}`}>
+              {link.label}
+            </Link>
+          ))}
+
           {isAuthenticated ? (
             <button onClick={handleLogout} className='navbar-link navbar-btn'>
               <LogOut size={16} /> Ieșire
@@ -86,11 +134,27 @@ const Navbar = () => {
               {link.label}
             </Link>
           ))}
-          {isAuthenticated && userData.type === 'admin' && (
-            <Link to={adminLink.to} onClick={() => setOpen(false)} className={`navbar-mobile-link ${location.pathname === '/admin' ? 'active' : ''}`}>
-              {adminLink.label}
+          <div className='navbar-mobile-divider'>Date & Rapoarte</div>
+          {dropdownLinks.map(link => (
+            <Link
+              key={link.to}
+              to={link.to}
+              onClick={() => setOpen(false)}
+              className={`navbar-mobile-link ${location.pathname === link.to ? 'active' : ''}`}
+            >
+              <link.icon size={16} /> {link.label}
             </Link>
-          )}
+          ))}
+          {isAuthenticated && userData.type !== 'admin' && userOnlyLinks.map(link => (
+            <Link key={link.to} to={link.to} onClick={() => setOpen(false)} className={`navbar-mobile-link ${location.pathname === link.to ? 'active' : ''}`}>
+              {link.label}
+            </Link>
+          ))}
+          {isAuthenticated && userData.type === 'admin' && adminLinks.map(link => (
+            <Link key={link.to} to={link.to} onClick={() => setOpen(false)} className={`navbar-mobile-link ${location.pathname === link.to ? 'active' : ''}`}>
+              {link.label}
+            </Link>
+          ))}
           {isAuthenticated ? (
             <button onClick={handleLogout} className='navbar-mobile-link navbar-btn'>
               <LogOut size={16} /> Ieșire
