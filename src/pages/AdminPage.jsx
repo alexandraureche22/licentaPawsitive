@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Navigate } from 'react-router-dom'
 import { Shield, PlusCircle, Edit, Trash2, CheckCircle, XCircle, Heart, Stethoscope } from 'lucide-react'
 import { getAllAnimals } from '../stores/actions/animal-actions'
+import { SERVER } from '../config/global'
 import { createAnimal, updateAnimal, deleteAnimal, getAllAdoptionRequests, updateAdoptionRequestStatus, getAllDonations, addHealthRecord } from '../stores/actions/admin-actions'
 import './Pages.css'
 
@@ -153,8 +154,30 @@ const AdminPage = () => {
                       <option value='scăzut'>Scăzut</option><option value='moderat'>Moderat</option><option value='ridicat'>Ridicat</option>
                     </select>
                   </div>
-                  <div className='form-group'><label>Imagine (cale)</label><input className='form-input' value={form.image} onChange={e => update('image', e.target.value)} placeholder='/images/nume.jpg' /></div>
+                  <div className='form-group'>
+                  <label>Imagine</label>
+                  {form.image && <img src={form.image.startsWith('/uploads') ? `${SERVER}${form.image}` : form.image} alt='preview' style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 8, marginBottom: '0.5rem', display: 'block' }} />}
+                  <input type='file' accept='image/*' onChange={async (e) => {
+                    const file = e.target.files[0]
+                    if (!file) return
+                    const formData = new FormData()
+                    formData.append('image', file)
+                    try {
+                      const response = await fetch(`${SERVER}/api/upload`, {
+                        method: 'post',
+                        headers: { authorization: userData.token },
+                        body: formData
+                      })
+                      if (response.ok) {
+                        const data = await response.json()
+                        update('image', data.imageUrl)
+                      }
+                    } catch (err) {
+                      console.error('Upload failed:', err)
+                    }
+                  }} />
                 </div>
+                  </div>
                 <div className='form-row'>
                   <div className='form-group'><label>Adăpost *</label><input className='form-input' value={form.shelter} onChange={e => update('shelter', e.target.value)} /></div>
                   <div className='form-group'><label>Oraș *</label><input className='form-input' value={form.city} onChange={e => update('city', e.target.value)} /></div>

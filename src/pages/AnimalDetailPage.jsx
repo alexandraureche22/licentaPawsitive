@@ -32,7 +32,7 @@ const AnimalDetailPage = () => {
         </Link>
         <div className='detail-grid'>
           <div>
-            <img src={animal.image} alt={animal.name} className='detail-image' />
+            <img src={animal.image?.startsWith('/uploads') ? `http://localhost:8080${animal.image}` : animal.image} alt={animal.name} className='detail-image' />
           </div>
           <div>
             <div className='detail-badges'>

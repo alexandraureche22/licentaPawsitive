@@ -4,6 +4,7 @@ import adoption from './adoption-controller.mjs'
 import donation from './donation-controller.mjs'
 import stats from './stats-controller.mjs'
 import message from './message-controller.mjs'
+import uploadCtrl from './upload-controller.mjs'
 
 export default {
   auth,
@@ -11,5 +12,6 @@ export default {
   adoption,
   donation,
   stats,
-  message
+  message,
+  upload: uploadCtrl
 }

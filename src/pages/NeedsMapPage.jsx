@@ -15,6 +15,35 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png'
 })
 
+// ALGORITM PRIORITATE ADĂPOSTURI
+// Calculează un scor de urgență pentru fiecare adăpost bazat pe:
+// - Număr nevoi cu urgență ridicată (×3 puncte)
+// - Număr nevoi cu urgență medie (×2 puncte)
+// - Număr nevoi cu urgență scăzută (×1 punct)
+// - Cât de recent a fost actualizat (bonus dacă e recent)
+function calculateShelterPriority(shelter) {
+  let score = 0
+
+  shelter.needs.forEach(need => {
+    if (need.urgency === 'ridicată') score += 3
+    else if (need.urgency === 'medie') score += 2
+    else score += 1
+  })
+
+  // Bonus pentru actualizare recentă (max 2 puncte)
+  const daysSinceUpdate = Math.floor((new Date() - new Date(shelter.lastUpdated)) / (1000 * 60 * 60 * 24))
+  if (daysSinceUpdate <= 7) score += 2
+  else if (daysSinceUpdate <= 14) score += 1
+
+  return score
+}
+
+function getPriorityLabel(score) {
+  if (score >= 8) return { text: 'URGENȚĂ MAXIMĂ', color: '#d32f2f', bg: '#ffebee' }
+  if (score >= 5) return { text: 'PRIORITATE RIDICATĂ', color: '#f57c00', bg: '#fff3e0' }
+  return { text: 'PRIORITATE NORMALĂ', color: '#388e3c', bg: '#e8f5e9' }
+}
+
 const allShelters = [
   ...shelterNeeds,
   {
@@ -117,39 +146,60 @@ const NeedsMapPage = () => (
         </MapContainer>
       </div>
 
-      {/* Lista adăposturi */}
-      <h2 style={{ marginBottom: '1.5rem' }}>Adăposturi partenere ({allShelters.length})</h2>
+      {/* Lista adăposturi sortată după urgență */}
+      <h2 style={{ marginBottom: '1.5rem' }}>Adăposturi partenere ({allShelters.length}) — ordonate după urgență</h2>
       <div className='need-cards'>
-        {allShelters.map(shelter => (
-          <div key={shelter.id} className='need-card'>
-            <div className='need-card-header'>
-              <div>
-                <h3>{shelter.shelter}</h3>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.875rem', color: '#888' }}>
-                  <MapPin size={14} /> {shelter.city}
-                </div>
-              </div>
-              <div className='need-card-date'><Clock size={12} /> {new Date(shelter.lastUpdated).toLocaleDateString('ro-RO')}</div>
-            </div>
-            <div className='need-items'>
-              {shelter.needs.map((need, j) => (
-                <div key={j} className={`need-item ${need.urgency === 'ridicată' ? 'high' : need.urgency === 'medie' ? 'medium' : 'low'}`}>
+        {[...allShelters]
+          .map(s => ({ ...s, priorityScore: calculateShelterPriority(s) }))
+          .sort((a, b) => b.priorityScore - a.priorityScore)
+          .map(shelter => {
+            const priority = getPriorityLabel(shelter.priorityScore)
+            return (
+              <div key={shelter.id} className='need-card'>
+                <div className='need-card-header'>
                   <div>
-                    <div className='need-item-name'>
-                      <Package size={16} /> {need.item}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem' }}>
+                      <h3 style={{ margin: 0 }}>{shelter.shelter}</h3>
+                      <span style={{ fontSize: '0.6875rem', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: 50, background: priority.bg, color: priority.color }}>
+                        {priority.text} (scor: {shelter.priorityScore})
+                      </span>
                     </div>
-                    <div className='need-item-qty'>Cantitate: {need.quantity}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.875rem', color: '#888' }}>
+                      <MapPin size={14} /> {shelter.city}
+                    </div>
                   </div>
-                  <span className='need-item-urgency'>
-                    {need.urgency === 'ridicată' && <AlertTriangle size={12} style={{ marginRight: 4 }} />}
-                    {need.urgency}
-                  </span>
+                  <div className='need-card-date'><Clock size={12} /> {new Date(shelter.lastUpdated).toLocaleDateString('ro-RO')}</div>
                 </div>
-              ))}
-            </div>
-            <Link to='/donatii' className='btn btn-outline btn-block' style={{ marginTop: '1rem' }}>Vreau să ajut</Link>
-          </div>
-        ))}
+                <div className='need-items'>
+                  {shelter.needs.map((need, j) => (
+                    <div key={j} className={`need-item ${need.urgency === 'ridicată' ? 'high' : need.urgency === 'medie' ? 'medium' : 'low'}`}>
+                      <div>
+                        <div className='need-item-name'>
+                          <Package size={16} /> {need.item}
+                        </div>
+                        <div className='need-item-qty'>Cantitate: {need.quantity}</div>
+                      </div>
+                      <span className='need-item-urgency'>
+                        {need.urgency === 'ridicată' && <AlertTriangle size={12} style={{ marginRight: 4 }} />}
+                        {need.urgency}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <Link to='/donatii' className='btn btn-outline btn-block' style={{ marginTop: '1rem' }}>Vreau să ajut</Link>
+              </div>
+            )
+          })}
+      </div>
+
+      {/* Explicație algoritm */}
+      <div className='form-card' style={{ marginTop: '2rem', padding: '1rem 1.5rem' }}>
+        <h4 style={{ margin: '0 0 0.5rem', fontSize: '0.875rem', color: '#c2185b' }}>Cum funcționează algoritmul de prioritate?</h4>
+        <p style={{ margin: 0, fontSize: '0.8125rem', color: '#888', lineHeight: 1.6 }}>
+          Fiecare adăpost primește un scor de urgență calculat automat: nevoile cu urgență ridicată valorează 3 puncte,
+          cele cu urgență medie 2 puncte, iar cele scăzute 1 punct. Adăposturile actualizate recent primesc un bonus
+          de până la 2 puncte. Lista este sortată descrescător după scor.
+        </p>
       </div>
     </div>
   </div>
