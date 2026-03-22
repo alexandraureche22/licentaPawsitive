@@ -21,7 +21,8 @@ apiRouter.get('/adoption-requests', middleware.auth, middleware.admin, controlle
 apiRouter.put('/adoption-requests/:id/status', middleware.auth, middleware.admin, controllers.adoption.updateAdoptionRequestStatus)
 
 // --- Donatii ---
-apiRouter.post('/donations', controllers.donation.createDonation)
+apiRouter.post('/donations', middleware.optionalAuth, controllers.donation.createDonation)
+apiRouter.get('/donations/mine', middleware.auth, controllers.donation.getMyDonations)
 apiRouter.get('/donations', middleware.auth, middleware.admin, controllers.donation.getAllDonations)
 
 // --- Upload imagine ---

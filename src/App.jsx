@@ -29,6 +29,7 @@ import AdminChatPage from './pages/AdminChatPage'
 import CalculatorPage from './pages/CalculatorPage'
 import StatisticiPage from './pages/StatisticiPage'
 import TransparentaPage from './pages/TransparentaPage'
+import ProfilePage from './pages/ProfilePage'
 
 const userDataSelector = state => state.user.data
 
@@ -58,6 +59,14 @@ const App = () => {
           <Route path='/calculator' element={<CalculatorPage />} />
           <Route path='/statistici' element={<StatisticiPage />} />
           <Route path='/transparenta' element={<TransparentaPage />} />
+          <Route
+            path='/profil'
+            element={
+              <AuthGuard isAuthenticated={isAuthenticated}>
+                <ProfilePage />
+              </AuthGuard>
+            }
+          />
           <Route
             path='/chat'
             element={

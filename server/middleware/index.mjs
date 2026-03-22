@@ -1,9 +1,11 @@
 import genericError from './generic-error-middleware.mjs'
 import auth from './auth-middleware.mjs'
 import admin from './admin-middleware.mjs'
+import optionalAuth from './optional-auth-middleware.mjs'
 
 export default {
   auth,
   genericError,
-  admin
+  admin,
+  optionalAuth
 }

@@ -24,7 +24,20 @@ const getAllDonations = async (req, res, next) => {
   }
 }
 
+const getMyDonations = async (req, res, next) => {
+  try {
+    const data = await models.Donation.findAll({
+      where: { userId: req.user.id },
+      order: [['createdAt', 'DESC']]
+    })
+    res.status(200).json(data)
+  } catch (err) {
+    next(err)
+  }
+}
+
 export default {
   createDonation,
-  getAllDonations
+  getAllDonations,
+  getMyDonations
 }
