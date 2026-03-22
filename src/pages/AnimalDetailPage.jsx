@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { ArrowLeft, MapPin, Heart, Check, X } from 'lucide-react'
 import HealthJournal from '../components/HealthJournal'
 import { getOneAnimal } from '../stores/actions/animal-actions'
+import { SERVER } from '../config/global'
 import './Pages.css'
 
 const AnimalDetailPage = () => {
@@ -32,7 +33,7 @@ const AnimalDetailPage = () => {
         </Link>
         <div className='detail-grid'>
           <div>
-            <img src={animal.image?.startsWith('/uploads') ? `http://localhost:8080${animal.image}` : animal.image} alt={animal.name} className='detail-image' />
+            <img src={animal.image?.startsWith('/uploads') ? `${SERVER}${animal.image}` : animal.image} alt={animal.name} className='detail-image' />
           </div>
           <div>
             <div className='detail-badges'>

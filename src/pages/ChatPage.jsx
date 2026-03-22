@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { Navigate } from 'react-router-dom'
-import { MessageCircle, Send, ArrowDown } from 'lucide-react'
+import { MessageCircle, Send } from 'lucide-react'
 import { SERVER } from '../config/global'
 import './Pages.css'
 

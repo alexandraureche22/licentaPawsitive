@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Navigate, Link } from 'react-router-dom'
-import { User, Mail, Shield, Heart, HandHeart, Clock, CheckCircle, XCircle, AlertCircle } from 'lucide-react'
+import { User, Mail, Shield, Heart, HandHeart, Clock, CheckCircle, XCircle } from 'lucide-react'
 import { SERVER } from '../config/global'
 import './Pages.css'
 
@@ -25,7 +25,6 @@ const ProfilePage = () => {
 
     const fetchData = async () => {
       try {
-        // Cereri de adopție
         const adoptRes = await fetch(`${SERVER}/api/adoption-requests/mine`, {
           headers: { authorization: userData.token }
         })
@@ -34,7 +33,6 @@ const ProfilePage = () => {
           setAdoptionRequests(data)
         }
 
-        // Donații
         const donRes = await fetch(`${SERVER}/api/donations/mine`, {
           headers: { authorization: userData.token }
         })
@@ -58,7 +56,6 @@ const ProfilePage = () => {
   return (
     <div className='page' style={{ paddingTop: '5rem', paddingBottom: '3rem' }}>
       <div className='container' style={{ maxWidth: '800px' }}>
-        {/* Header profil */}
         <div className='form-card' style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '1.5rem', padding: '1.5rem' }}>
           <div style={{ width: 72, height: 72, borderRadius: '50%', background: '#fce4ec', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <User size={36} style={{ color: '#c2185b' }} />
@@ -88,7 +85,6 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* Tabs */}
         <div className='tabs' style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
           <button className={`tab-btn ${tab === 'info' ? 'active' : ''}`} onClick={() => setTab('info')}>
             <User size={16} /> Informații
@@ -105,7 +101,6 @@ const ProfilePage = () => {
           <div style={{ textAlign: 'center', padding: '3rem', color: '#888' }}>Se încarcă...</div>
         ) : (
           <>
-            {/* Info */}
             {tab === 'info' && (
               <div className='form-card'>
                 <h3 style={{ marginTop: 0 }}>Datele contului</h3>
@@ -134,7 +129,6 @@ const ProfilePage = () => {
               </div>
             )}
 
-            {/* Cereri adopție */}
             {tab === 'adoptions' && (
               <div>
                 {adoptionRequests.length === 0 ? (
@@ -154,7 +148,7 @@ const ProfilePage = () => {
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                               {req.animal && (
                                 <img
-                                  src={req.animal.image?.startsWith('/uploads') ? `http://localhost:8080${req.animal.image}` : req.animal.image}
+                                  src={req.animal.image?.startsWith('/uploads') ? `${SERVER}${req.animal.image}` : req.animal.image}
                                   alt={req.animal.name}
                                   style={{ width: 48, height: 48, borderRadius: 8, objectFit: 'cover' }}
                                 />
@@ -182,7 +176,6 @@ const ProfilePage = () => {
               </div>
             )}
 
-            {/* Donații */}
             {tab === 'donations' && (
               <div>
                 {donations.length === 0 ? (

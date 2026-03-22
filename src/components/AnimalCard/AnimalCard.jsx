@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { MapPin, Heart } from 'lucide-react'
+import { SERVER } from '../../config/global'
 import './AnimalCard.css'
 
 const AnimalCard = ({ animal, matchScore }) => {
@@ -18,7 +19,7 @@ const AnimalCard = ({ animal, matchScore }) => {
   return (
     <Link to={`/animale/${animal.id}`} className='animal-card'>
       <div className='animal-card-image'>
-        <img src={animal.image?.startsWith('/uploads') ? `http://localhost:8080${animal.image}` : animal.image} alt={animal.name} loading='lazy' />
+        <img src={animal.image?.startsWith('/uploads') ? `${SERVER}${animal.image}` : animal.image} alt={animal.name} loading='lazy' />
         {matchScore !== undefined && (
           <div className={`animal-card-match ${matchScore >= 80 ? 'high' : matchScore >= 60 ? 'medium' : 'low'}`}>
             {matchScore}% match
