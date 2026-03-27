@@ -5,6 +5,7 @@ import donation from './donation-controller.mjs'
 import stats from './stats-controller.mjs'
 import message from './message-controller.mjs'
 import uploadCtrl from './upload-controller.mjs'
+import recommendation from './recommendation-controller.mjs'
 
 export default {
   auth,
@@ -13,5 +14,6 @@ export default {
   donation,
   stats,
   message,
-  upload: uploadCtrl
+  upload: uploadCtrl,
+  recommendation
 }

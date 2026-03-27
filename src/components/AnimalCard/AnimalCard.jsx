@@ -3,17 +3,25 @@ import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { MapPin, Heart } from 'lucide-react'
 import { SERVER } from '../../config/global'
+import { toggleFavorite } from '../../stores/actions/animal-actions'
 import './AnimalCard.css'
 
 const AnimalCard = ({ animal, matchScore }) => {
   const dispatch = useDispatch()
   const favorites = useSelector(state => state.favorites.data)
+  const isAuthenticated = !!useSelector(state => state.user.data.token)
   const isFavorite = favorites.some(a => a.id === animal.id)
 
-  const handleFavorite = (e) => {
+  const handleFavorite = async (e) => {
     e.preventDefault()
     e.stopPropagation()
+    // Actualizăm local instant
     dispatch({ type: 'TOGGLE_FAVORITE', payload: animal })
+    // Și pe server dacă e logat
+    if (isAuthenticated) {
+      const action = await toggleFavorite(animal.id)
+      dispatch(action)
+    }
   }
 
   return (

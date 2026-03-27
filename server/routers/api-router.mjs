@@ -27,6 +27,10 @@ apiRouter.get('/donations', middleware.auth, middleware.admin, controllers.donat
 
 // --- Upload imagine ---
 apiRouter.post('/upload', middleware.auth, middleware.admin, controllers.upload.uploadImage)
+// --- Favorite și Recomandări ---
+apiRouter.post('/favorites/:animalId', middleware.auth, controllers.recommendation.toggleFavorite)
+apiRouter.get('/favorites', middleware.auth, controllers.recommendation.getMyFavorites)
+apiRouter.get('/recommendations', middleware.auth, controllers.recommendation.getRecommendations)
 // --- Statistici publice ---
 apiRouter.get('/stats', controllers.stats.getPublicStats)
 

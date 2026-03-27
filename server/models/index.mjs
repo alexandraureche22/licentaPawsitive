@@ -5,6 +5,7 @@ import createHealthRecordEntity from './health-record.mjs'
 import createAdoptionRequestEntity from './adoption-request.mjs'
 import createDonationEntity from './donation.mjs'
 import createMessageEntity from './message.mjs'
+import createFavoriteEntity from './favorite.mjs'
 
 const sequelize = new Sequelize({
   dialect: 'sqlite',
@@ -18,6 +19,7 @@ const HealthRecord = createHealthRecordEntity(sequelize, Sequelize)
 const AdoptionRequest = createAdoptionRequestEntity(sequelize, Sequelize)
 const Donation = createDonationEntity(sequelize, Sequelize)
 const Message = createMessageEntity(sequelize, Sequelize)
+const Favorite = createFavoriteEntity(sequelize, Sequelize)
 
 Animal.hasMany(HealthRecord)
 HealthRecord.belongsTo(Animal)
@@ -30,6 +32,12 @@ AdoptionRequest.belongsTo(Animal)
 
 User.hasMany(Donation)
 Donation.belongsTo(User)
+
+User.hasMany(Favorite)
+Favorite.belongsTo(User)
+
+Animal.hasMany(Favorite)
+Favorite.belongsTo(Animal)
 
 try {
   await sequelize.sync()
@@ -44,5 +52,6 @@ export default {
   HealthRecord,
   AdoptionRequest,
   Donation,
-  Message
+  Message,
+  Favorite
 }

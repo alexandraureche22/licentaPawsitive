@@ -1,5 +1,8 @@
 const initialState = {
-  data: []
+  data: [],
+  recommendations: [],
+  profile: null,
+  loading: false
 }
 
 export default function favoritesReducer(state = initialState, action) {
@@ -11,6 +14,19 @@ export default function favoritesReducer(state = initialState, action) {
       }
       return { ...state, data: [...state.data, action.payload] }
     }
+
+    case 'GET_MY_FAVORITES_PENDING':
+      return { ...state, loading: true }
+
+    case 'GET_MY_FAVORITES_FULFILLED':
+      return { ...state, loading: false, data: action.payload }
+
+    case 'GET_RECOMMENDATIONS_FULFILLED':
+      return { ...state, recommendations: action.payload.recommendations, profile: action.payload.profile }
+
+    case 'LOGOUT_FULFILLED':
+      return { ...initialState }
+
     default:
       return state
   }
