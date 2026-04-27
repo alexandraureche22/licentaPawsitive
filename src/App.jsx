@@ -30,6 +30,7 @@ import CalculatorPage from './pages/CalculatorPage'
 import StatisticiPage from './pages/StatisticiPage'
 import TransparentaPage from './pages/TransparentaPage'
 import ProfilePage from './pages/ProfilePage'
+import ScrollToTop from './components/ScrollToTop'
 
 const userDataSelector = state => state.user.data
 
@@ -42,6 +43,7 @@ const App = () => {
       <ErrorDisplay />
       <Router>
         <Navbar />
+        <ScrollToTop />
         <Routes>
           <Route path='/' element={<Index />} />
           <Route path='/animale' element={<AnimalsPage />} />
