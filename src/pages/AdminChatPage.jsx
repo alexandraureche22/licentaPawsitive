@@ -12,12 +12,16 @@ const AdminChatPage = () => {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
-  const messagesEndRef = useRef(null)
+  const messagesContainerRef = useRef(null)
+  const prevMessageCount = useRef(0)
 
   const isAdmin = userData.type === 'admin'
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  const scrollChatToBottom = () => {
+    const container = messagesContainerRef.current
+    if (container) {
+      container.scrollTop = container.scrollHeight
+    }
   }
 
   const fetchConversations = async () => {
@@ -46,12 +50,17 @@ const AdminChatPage = () => {
   }, [isAdmin])
 
   useEffect(() => {
-    scrollToBottom()
+    if (messages.length > prevMessageCount.current) {
+      scrollChatToBottom()
+    }
+    prevMessageCount.current = messages.length
   }, [messages])
 
   const selectConversation = (convo) => {
     setSelectedUser(convo)
     setMessages(convo.messages)
+    prevMessageCount.current = 0
+    setTimeout(scrollChatToBottom, 100)
   }
 
   const sendReply = async () => {
@@ -95,7 +104,6 @@ const AdminChatPage = () => {
         </h1>
 
         <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: '1.5rem', height: '70vh' }}>
-          {/* Lista conversații */}
           <div className='form-card' style={{ overflow: 'auto', padding: '0.5rem' }}>
             {conversations.length === 0 ? (
               <div style={{ textAlign: 'center', color: '#888', padding: '2rem', fontSize: '0.875rem' }}>
@@ -134,7 +142,6 @@ const AdminChatPage = () => {
             )}
           </div>
 
-          {/* Chat activ */}
           <div className='chat-container'>
             {selectedUser ? (
               <>
@@ -146,7 +153,7 @@ const AdminChatPage = () => {
                   </div>
                 </div>
 
-                <div className='chat-messages' style={{ maxHeight: 'none', flex: 1 }}>
+                <div className='chat-messages' ref={messagesContainerRef} style={{ maxHeight: 'none', flex: 1, overflowY: 'auto' }}>
                   {messages.map(msg => (
                     <div key={msg.id} className={`chat-msg ${msg.isAdmin ? 'user' : 'system'}`}>
                       {msg.isAdmin && <div style={{ fontSize: '0.6875rem', fontWeight: 600, marginBottom: '0.25rem', opacity: 0.8 }}>Tu (Admin)</div>}
@@ -156,7 +163,6 @@ const AdminChatPage = () => {
                       </div>
                     </div>
                   ))}
-                  <div ref={messagesEndRef} />
                 </div>
 
                 <div className='chat-input'>

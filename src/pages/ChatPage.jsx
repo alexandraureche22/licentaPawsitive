@@ -10,12 +10,16 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
-  const messagesEndRef = useRef(null)
+  const messagesContainerRef = useRef(null)
+  const prevMessageCount = useRef(0)
 
   const isAuthenticated = !!userData.token
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  const scrollChatToBottom = () => {
+    const container = messagesContainerRef.current
+    if (container) {
+      container.scrollTop = container.scrollHeight
+    }
   }
 
   const fetchMessages = async () => {
@@ -39,8 +43,12 @@ const ChatPage = () => {
     return () => clearInterval(interval)
   }, [isAuthenticated])
 
+  // Scroll doar când apar mesaje noi
   useEffect(() => {
-    scrollToBottom()
+    if (messages.length > prevMessageCount.current) {
+      scrollChatToBottom()
+    }
+    prevMessageCount.current = messages.length
   }, [messages])
 
   useEffect(() => {
@@ -87,7 +95,7 @@ const ChatPage = () => {
             </div>
           </div>
 
-          <div className='chat-messages' style={{ maxHeight: 'none', flex: 1 }}>
+          <div className='chat-messages' ref={messagesContainerRef} style={{ maxHeight: 'none', flex: 1, overflowY: 'auto' }}>
             {messages.length === 0 && (
               <div style={{ textAlign: 'center', color: '#888', padding: '2rem', fontSize: '0.875rem' }}>
                 <MessageCircle size={40} style={{ color: '#ddd', margin: '0 auto 1rem', display: 'block' }} />
@@ -103,7 +111,6 @@ const ChatPage = () => {
                 </div>
               </div>
             ))}
-            <div ref={messagesEndRef} />
           </div>
 
           <div className='chat-input'>
