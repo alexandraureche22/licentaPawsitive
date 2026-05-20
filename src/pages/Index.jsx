@@ -42,7 +42,7 @@ const Index = () => {
                 <Heart size={16} /> Peste 500 de animale caută un cămin
               </div>
               <h1 className='hero-title'>
-                Găsește-ți <span className='text-gradient'>companion</span> perfect
+                Găsește-ți <span className='text-gradient'>companionul</span> perfect
               </h1>
               <p className='hero-desc'>
                 Platformă inteligentă de adopții care folosește un algoritm de compatibilitate

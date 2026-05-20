@@ -1,16 +1,33 @@
-import React, { useState } from 'react'
-import { Heart, Users, HandHeart } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import { Heart, Users } from 'lucide-react'
 import { shelterNeeds } from '../data/animals'
+import { SERVER } from '../config/global'
 import './Pages.css'
 
 const DistanceAdoptionPage = () => {
   const [activeTab, setActiveTab] = useState('sponsor')
+  const [animals, setAnimals] = useState([])
+
+  useEffect(() => {
+    const fetchAnimals = async () => {
+      try {
+        const response = await fetch(`${SERVER}/api/animals`)
+        if (response.ok) {
+          const data = await response.json()
+          setAnimals(data.data || [])
+        }
+      } catch (err) {
+        console.error(err)
+      }
+    }
+    fetchAnimals()
+  }, [])
 
   return (
     <div className='page'>
       <section className='page-hero'>
         <div className='container'>
-          <div className='hero-badge'><HandHeart size={16} /> Implică-te</div>
+          <div className='hero-badge'><Heart size={16} /> Implică-te</div>
           <h1>Adoptă la <span className='text-gradient'>distanță</span> & Voluntariat</h1>
           <p>Nu poți adopta acum? Sponsorizează un animal sau devino voluntar la un adăpost din comunitatea ta.</p>
         </div>
@@ -36,7 +53,14 @@ const DistanceAdoptionPage = () => {
               </div>
               <div className='form-group'>
                 <label>Animal *</label>
-                <select className='form-select'><option value=''>Alege animalul</option></select>
+                <select className='form-select'>
+                  <option value=''>Alege animalul</option>
+                  {animals.map(a => (
+                    <option key={a.id} value={a.id}>
+                      {a.name} — {a.species} · {a.breed} · {a.city}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className='form-group'><label>Sumă lunară (RON) *</label><input className='form-input' type='number' min={10} /></div>
               <div className='form-group'><label>Mesaj (opțional)</label><textarea className='form-textarea' /></div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { PawPrint, Mail, Lock, User } from 'lucide-react'
+import { PawPrint, Mail, Lock, User, Eye, EyeOff } from 'lucide-react'
 import { login, register } from '../stores/actions/user-actions'
 import './Pages.css'
 
@@ -10,6 +10,7 @@ const AuthPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [fullName, setFullName] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -69,9 +70,27 @@ const AuthPage = () => {
 
           <div className='form-group'>
             <label>Parolă</label>
-            <div className='form-input-icon'>
+            <div className='form-input-icon' style={{ position: 'relative' }}>
               <Lock size={16} />
-              <input className='form-input' type='password' value={password} onChange={e => setPassword(e.target.value)} placeholder='Minim 6 caractere' />
+              <input
+                className='form-input'
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder='Minim 6 caractere'
+                style={{ paddingRight: '2.5rem' }}
+              />
+              <button
+                type='button'
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: 'absolute', right: '0.75rem', top: '50%',
+                  transform: 'translateY(-50%)', background: 'none',
+                  border: 'none', cursor: 'pointer', color: '#888', padding: 0
+                }}
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
             </div>
           </div>
 
@@ -80,7 +99,7 @@ const AuthPage = () => {
           </button>
 
           <div className='auth-toggle'>
-            <button onClick={() => setIsLogin(!isLogin)}>
+            <button onClick={() => { setIsLogin(!isLogin); setShowPassword(false) }}>
               {isLogin ? 'Nu ai cont? Înregistrează-te' : 'Ai deja cont? Conectează-te'}
             </button>
           </div>
