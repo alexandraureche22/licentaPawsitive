@@ -23,6 +23,10 @@ const AdoptionFormPage = () => {
   })
 
   useEffect(() => {
+    dispatch({ type: 'RESET_ADOPTION_SUCCESS' })
+  }, [dispatch])
+
+  useEffect(() => {
     const load = async () => {
       const action = await getOneAnimal(id)
       dispatch(action)

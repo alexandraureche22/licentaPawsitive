@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { ArrowLeft, MapPin, Heart, Check, X } from 'lucide-react'
+import { ArrowLeft, MapPin, Heart, Check, X, CheckCircle } from 'lucide-react'
 import HealthJournal from '../components/HealthJournal'
 import { getOneAnimal } from '../stores/actions/animal-actions'
 import { SERVER } from '../config/global'
@@ -39,6 +39,11 @@ const AnimalDetailPage = () => {
             <div className='detail-badges'>
               <span className='badge badge-secondary'>{animal.species}</span>
               <span className='badge badge-outline'>{animal.gender}</span>
+              {animal.adopted && (
+                <span className='badge' style={{ background: '#e8f5e9', color: '#2e7d32' }}>
+                  Adoptat
+                </span>
+              )}
             </div>
             <h1 className='detail-name'>{animal.name}</h1>
             <p className='detail-info'>{animal.breed} · {animal.age} · Talie {animal.size}</p>
@@ -76,9 +81,15 @@ const AnimalDetailPage = () => {
             </div>
 
             <div className='detail-actions'>
-              <Link to={`/adopta/${animal.id}`} className='btn btn-primary' style={{ flex: 1 }}>
-                <Heart size={16} /> Vreau să adopt
-              </Link>
+              {animal.adopted ? (
+                <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1rem', background: '#e8f5e9', borderRadius: 8, color: '#2e7d32', fontWeight: 600 }}>
+                  <CheckCircle size={18} /> Acest animal a fost deja adoptat
+                </div>
+              ) : (
+                <Link to={`/adopta/${animal.id}`} className='btn btn-primary' style={{ flex: 1 }}>
+                  <Heart size={16} /> Vreau să adopt
+                </Link>
+              )}
               <Link to='/compatibilitate' className='btn btn-outline'>
                 Verifică compatibilitatea
               </Link>

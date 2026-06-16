@@ -1,7 +1,7 @@
 import store from '../store'
 import { SERVER } from '../../config/global'
 
-export const getAllAnimals = async ({ search = '', species = '', pageSize = '', pageNumber = '', sortField = '', sortOrder = '' } = {}) => {
+export const getAllAnimals = async ({ search = '', species = '', pageSize = '', pageNumber = '', sortField = '', sortOrder = '', showAdopted = '' } = {}) => {
   return {
     type: 'GET_ALL_ANIMALS',
     payload: async () => {
@@ -11,7 +11,8 @@ export const getAllAnimals = async ({ search = '', species = '', pageSize = '', 
         `&pageSize=${pageSize}` +
         `&pageNumber=${pageNumber}` +
         `&sortField=${sortField}` +
-        `&sortOrder=${sortOrder}`
+        `&sortOrder=${sortOrder}` +
+        `&showAdopted=${showAdopted}`
 
       const response = await fetch(url)
       if (!response.ok) {

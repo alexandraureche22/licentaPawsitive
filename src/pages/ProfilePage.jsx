@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Navigate, Link } from 'react-router-dom'
-import { User, Mail, Shield, Heart, HandHeart, Clock, CheckCircle, XCircle } from 'lucide-react'
+import { User, Mail, Shield, Heart, HandHeart, Clock, CheckCircle, XCircle, Ban } from 'lucide-react'
 import { SERVER } from '../config/global'
 import './Pages.css'
 
@@ -17,6 +17,7 @@ const ProfilePage = () => {
   const [donations, setDonations] = useState([])
   const [loading, setLoading] = useState(true)
   const [tab, setTab] = useState('info')
+  const [cancelingId, setCancelingId] = useState(null)
 
   const isAuthenticated = !!userData.token
 
@@ -48,6 +49,27 @@ const ProfilePage = () => {
 
     fetchData()
   }, [isAuthenticated, userData.token])
+
+  const handleCancel = async (requestId) => {
+    if (!window.confirm('Ești sigur că vrei să anulezi această cerere de adopție?')) return
+    setCancelingId(requestId)
+    try {
+      const res = await fetch(`${SERVER}/api/adoption-requests/${requestId}`, {
+        method: 'DELETE',
+        headers: { authorization: userData.token }
+      })
+      if (res.ok) {
+        setAdoptionRequests(prev => prev.filter(req => req.id !== requestId))
+      } else {
+        const data = await res.json()
+        alert(data.message || 'Nu s-a putut anula cererea')
+      }
+    } catch (err) {
+      console.error(err)
+      alert('A apărut o eroare la anularea cererii')
+    }
+    setCancelingId(null)
+  }
 
   if (!isAuthenticated) return <Navigate to='/autentificare' replace />
 
@@ -165,9 +187,19 @@ const ProfilePage = () => {
                             </span>
                           </div>
                           <p style={{ fontSize: '0.875rem', color: '#555', margin: '0 0 0.25rem' }}><strong>Motivație:</strong> {req.motivation}</p>
-                          <p style={{ fontSize: '0.75rem', color: '#aaa', margin: 0 }}>
+                          <p style={{ fontSize: '0.75rem', color: '#aaa', margin: '0 0 0.75rem' }}>
                             Trimisă pe {new Date(req.createdAt).toLocaleDateString('ro-RO')}
                           </p>
+                          {req.status === 'pending' && (
+                            <button
+                              className='btn btn-outline'
+                              style={{ color: '#d32f2f', borderColor: '#d32f2f', fontSize: '0.8125rem', padding: '0.5rem 1rem' }}
+                              onClick={() => handleCancel(req.id)}
+                              disabled={cancelingId === req.id}
+                            >
+                              <Ban size={14} /> {cancelingId === req.id ? 'Se anulează...' : 'Anulează cererea'}
+                            </button>
+                          )}
                         </div>
                       )
                     })}

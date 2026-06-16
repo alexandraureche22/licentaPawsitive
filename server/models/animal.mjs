@@ -61,6 +61,10 @@ export default (sequelize, DataTypes) => {
     city: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    adopted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     }
   })
 }

@@ -27,8 +27,13 @@ const AnimalCard = ({ animal, matchScore }) => {
   return (
     <Link to={`/animale/${animal.id}`} className='animal-card'>
       <div className='animal-card-image'>
-        <img src={animal.image?.startsWith('/uploads') ? `${SERVER}${animal.image}` : animal.image} alt={animal.name} loading='lazy' />
-        {matchScore !== undefined && (
+        <img src={animal.image?.startsWith('/uploads') ? `${SERVER}${animal.image}` : animal.image} alt={animal.name} loading='lazy' style={animal.adopted ? { filter: 'grayscale(40%)', opacity: 0.7 } : undefined} />
+        {animal.adopted && (
+          <div className='animal-card-adopted-badge'>
+            Adoptat
+          </div>
+        )}
+        {matchScore !== undefined && !animal.adopted && (
           <div className={`animal-card-match ${matchScore >= 80 ? 'high' : matchScore >= 60 ? 'medium' : 'low'}`}>
             {matchScore}% match
           </div>

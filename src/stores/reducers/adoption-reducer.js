@@ -21,6 +21,9 @@ export default function adoptionReducer(state = initialState, action) {
     case 'GET_MY_ADOPTION_REQUESTS_REJECTED':
       return { ...state, loading: false, error: action.payload || 'Eroare cerere adopție' }
 
+    case 'RESET_ADOPTION_SUCCESS':
+      return { ...state, success: false }
+
     default:
       return state
   }

@@ -6,6 +6,7 @@ import stats from './stats-controller.mjs'
 import message from './message-controller.mjs'
 import uploadCtrl from './upload-controller.mjs'
 import recommendation from './recommendation-controller.mjs'
+import news from './news-controller.mjs'
 
 export default {
   auth,
@@ -15,5 +16,6 @@ export default {
   stats,
   message,
   upload: uploadCtrl,
-  recommendation
+  recommendation,
+  news
 }

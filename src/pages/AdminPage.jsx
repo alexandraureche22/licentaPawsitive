@@ -35,7 +35,7 @@ const AdminPage = () => {
   useEffect(() => {
     if (!isAdmin) return
     const load = async () => {
-      dispatch(await getAllAnimals())
+      dispatch(await getAllAnimals({ showAdopted: 'true' }))
       dispatch(await getAllAdoptionRequests())
       dispatch(await getAllDonations())
     }
@@ -63,7 +63,7 @@ const AdminPage = () => {
     setShowForm(false)
     setEditingId(null)
     setForm(emptyAnimal)
-    setTimeout(async () => dispatch(await getAllAnimals()), 500)
+    setTimeout(async () => dispatch(await getAllAnimals({ showAdopted: 'true' })), 500)
   }
 
   const handleEdit = (animal) => {
@@ -78,11 +78,12 @@ const AdminPage = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Ești sigur că vrei să ștergi acest animal?')) return
     dispatch(await deleteAnimal(id))
-    setTimeout(async () => dispatch(await getAllAnimals()), 500)
+    setTimeout(async () => dispatch(await getAllAnimals({ showAdopted: 'true' })), 500)
   }
 
   const handleStatusChange = async (id, status) => {
     dispatch(await updateAdoptionRequestStatus(id, status))
+    setTimeout(async () => dispatch(await getAllAnimals({ showAdopted: 'true' })), 500)
   }
 
   const handleAddHealthRecord = async () => {
@@ -90,7 +91,7 @@ const AdminPage = () => {
     dispatch(await addHealthRecord(showHealthForm, { ...healthForm, verified: true }))
     setShowHealthForm(null)
     setHealthForm(emptyRecord)
-    setTimeout(async () => dispatch(await getAllAnimals()), 500)
+    setTimeout(async () => dispatch(await getAllAnimals({ showAdopted: 'true' })), 500)
   }
 
   return (
@@ -227,7 +228,14 @@ const AdminPage = () => {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                     <img src={animal.image} alt={animal.name} style={{ width: 48, height: 48, borderRadius: 8, objectFit: 'cover' }} />
                     <div style={{ flex: 1 }}>
-                      <strong>{animal.name}</strong>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <strong>{animal.name}</strong>
+                        {animal.adopted && (
+                          <span style={{ padding: '0.125rem 0.5rem', borderRadius: 50, fontSize: '0.6875rem', fontWeight: 600, background: '#e8f5e9', color: '#2e7d32' }}>
+                            Adoptat
+                          </span>
+                        )}
+                      </div>
                       <p style={{ margin: 0, fontSize: '0.8125rem', color: '#888' }}>{animal.species} · {animal.breed} · {animal.age} · {animal.city}</p>
                     </div>
                     <button className='btn btn-sm btn-outline' onClick={() => { setShowHealthForm(animal.id); setHealthForm(emptyRecord) }}>

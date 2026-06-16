@@ -19,6 +19,7 @@ apiRouter.post('/adoption-requests', middleware.auth, controllers.adoption.creat
 apiRouter.get('/adoption-requests/mine', middleware.auth, controllers.adoption.getMyAdoptionRequests)
 apiRouter.get('/adoption-requests', middleware.auth, middleware.admin, controllers.adoption.getAllAdoptionRequests)
 apiRouter.put('/adoption-requests/:id/status', middleware.auth, middleware.admin, controllers.adoption.updateAdoptionRequestStatus)
+apiRouter.delete('/adoption-requests/:id', middleware.auth, controllers.adoption.cancelAdoptionRequest)
 
 // --- Donatii ---
 apiRouter.post('/donations', middleware.optionalAuth, controllers.donation.createDonation)
@@ -33,6 +34,12 @@ apiRouter.get('/favorites', middleware.auth, controllers.recommendation.getMyFav
 apiRouter.get('/recommendations', middleware.auth, controllers.recommendation.getRecommendations)
 // --- Statistici publice ---
 apiRouter.get('/stats', controllers.stats.getPublicStats)
+
+// --- Noutati ---
+apiRouter.get('/news', controllers.news.getAllNews)
+apiRouter.post('/news', middleware.auth, middleware.admin, controllers.news.createNews)
+apiRouter.put('/news/:id', middleware.auth, middleware.admin, controllers.news.updateNews)
+apiRouter.delete('/news/:id', middleware.auth, middleware.admin, controllers.news.deleteNews)
 
 // --- Mesaje ---
 apiRouter.post('/messages', middleware.auth, controllers.message.sendMessage)
